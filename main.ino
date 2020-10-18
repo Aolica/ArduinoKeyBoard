@@ -8,7 +8,7 @@ Adafruit_MCP23017 mcp1, mcp2;
 byte octave = 3; //右端のCのオクターブ
 byte semitone = 0; //はじめのkey(key=C)
 int buf;
-struct stat keystatus[KEYS];
+struct keystat keykeystatus[KEYS];
 
 // the setup routine runs once when you press reset:
 void setup() {
@@ -23,7 +23,7 @@ void setup() {
     mcp2.pullUp(i,HIGH);
   }
   for (int i = 0; i < KEYS; i++) {  //キーのステータスの初期化
-    keystatus[i].ispushed = PUSH_FALSE;
+    keykeystatus[i].ispushed = PUSH_FALSE;
   }
 }
 
@@ -43,16 +43,16 @@ void loop() {
     } else {
       buf = mcp2.digitalRead(i - 16);            //mcp1をすべて読みこんだらmcp2を読み込む
     }
-    if (buf != keystatus[i].ispushed) {    //ボタンステータスが変わったら
-      if (keystatus[i].ispushed  != PUSH_TRUE) {  //押されたときの処理
-        keystatus[i].ispushed = PUSH_TRUE;
-        //keystatus[i].semitone = semitone;
-        keystatus[i].octave   = octave + (byte)(int)((i + semitone) / 12.0);      //オクターブの設定
-        keystatus[i].key      = (i + semitone) % 12;
-        SendKeyData(1,keystatus[i]);
+    if (buf != keykeystatus[i].ispushed) {    //ボタンステータスが変わったら
+      if (keykeystatus[i].ispushed  != PUSH_TRUE) {  //押されたときの処理
+        keykeystatus[i].ispushed = PUSH_TRUE;
+        //keykeystatus[i].semitone = semitone;
+        keykeystatus[i].octave   = octave + (byte)(int)((i + semitone) / 12.0);      //オクターブの設定
+        keykeystatus[i].key      = (i + semitone) % 12;
+        SendKeyData(1,keykeystatus[i]);
       } else {                                 //離されたときの処理
-        keystatus[i].ispushed = PUSH_FALSE;
-        SendKeyData(0,keystatus[i]);
+        keykeystatus[i].ispushed = PUSH_FALSE;
+        SendKeyData(0,keykeystatus[i]);
       }
     }
   }

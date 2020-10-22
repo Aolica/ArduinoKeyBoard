@@ -17,29 +17,29 @@ char KeyNumToAlph(byte num) {
   switch ((num )) {
     case 0:
     case 1:
-      return ('C');
+      return ('2');
       break;
     case 2:
     case 3:
-      return ('D');
+      return ('3');
       break;
     case 4:
-      return ('E');
+      return ('4');
       break;
     case 5:
     case 6:
-      return ('F');
+      return ('5');
       break;
     case 7:
     case 8:
-      return ('G');
+      return ('6');
       break;
     case 9:
     case 10:
-      return ('A');
+      return ('0');
       break;
     case 11:
-      return ('B');
+      return ('1');
       break;
   }
 }
@@ -50,7 +50,7 @@ void SendKeyData(int type,struct keystat data) {
   if(data.key + data.semitone > 12){
     data.octave + 1;
   }*/
-  sprintf(datas,"%d%c%u%u%u%u",1,KeyNumToAlph(data.key),IsSharp(data.key),data.octave,type,data.key);
+  sprintf(datas,"%d%c%u%u%u",1,KeyNumToAlph(data.key),IsSharp(data.key),data.octave,type);
   Serial.print(datas);
   
   /*
@@ -69,5 +69,21 @@ void SendKeyData(int type,struct keystat data) {
 void SendKnobData(int rdirection,int id){
   char datas[5];
   sprintf(datas,"%d%d%d",2,id,rdirection);
+  Serial.print(datas);
+}
+
+void SendOtherData(int num){
+  char datas[3];
+  switch(num){
+    case 0:
+      sprintf(datas,"%d",3);
+      break;
+    case 1:
+      sprintf(datas,"%d",4);
+      break;
+    default:
+      return;
+      break;
+  }
   Serial.print(datas);
 }
